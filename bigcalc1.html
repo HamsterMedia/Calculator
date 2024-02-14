@@ -1,0 +1,43 @@
+<!DOCTYPE html> 
+    <html> 
+        <head> 
+            <title>Пожалуйста, зачти задачу</title> 
+            <style> body { background-color: hwb(192 71% 3%); } 
+            input { margin-top: 10px; padding: 5px; } 
+            button { background-color: rgb(0, 0, 0); color: rgb(255, 251, 251); padding: 5px 10px; margin-top: 10px; }
+            </style> 
+        </head> 
+        <body> 
+            <input type="text" id="expression" placeholder="Введите выражение"> 
+            <input id="userInput" type="number" value = "0"/> 
+    <p id="timerr">0</p>
+    <button onclick="startTime()">Ждать</button>
+    <script>
+    var myVar;
+    var timer = document.getElementById("userInput");
+    var countDownSeconds;
+    function startTime() {
+      myVar = setInterval(start, 1000);
+      document.getElementById("timerr").innerHTML = timer.value;
+      countDownSeconds = timer.value;
+    }
+    function start() {
+      countDownSeconds--;
+      document.getElementById("timerr").innerHTML = countDownSeconds;
+      if (countDownSeconds <= 0) {
+        stop();
+        document.getElementById("timerr").innerHTML = 0;
+      }
+    }
+    function stop() {
+      clearInterval(myVar);
+      countDownSeconds = 0;
+    }
+</script>
+            <button onclick="calculate()">Посчитать</button> 
+            <p>Ответ:</p>
+            <p id="result"></p>
+            <img src="go-foto.png">
+            <p>Пожалуйста, зачти задачу</p>
+    </body> 
+    </html>
