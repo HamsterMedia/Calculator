@@ -1,1 +1,54 @@
+<!DOCTYPE html>
+<title>База данных</title>
+<head>
+    <h1>История</h1>
+    <style> body { background-color: hwb(192 71% 3%); } 
+        input { margin-top: 10px; padding: 5px; } 
+        button { background-color: rgb(0, 0, 0); color: rgb(255, 251, 251); padding: 5px 10px; margin-top: 10px; }
+        footer {background-color: hwb(237 47% 8%);}
+        </style> 
+    <body>
+        <p><img src="bd.png" width="230" height="300"></p>
+        <p> <button onclick="document.location='bigcalc1.html'">Вернуться к вычислениям</button></p>
+       <p> <button onclick="getAll()">Вызвать историю</button></p>
+       <script>
+        function getAll() {
+          console.log('GetAll');
+      fetch('http://elit-dress.ru:9990/results/')
+      .then(response => {
+        if (response.ok) {
+        return response.json(); // все ок, получили json
+        } else {
+        throw new Error('API request failed'); // не ок, паникуем
+        }
+      })
+      .then(data => {
+        // выведем в консоль для отладки
+        console.log(data); 
+      document.getElementById("allResult").innerHTML = data; //выведем на хтмл-страницу
+      })
+      .catch(error => {
+        // вы все сломали
+        console.error(error); 
+      });
+      
+        }
+      </script>
+      
+       <table>     
+       <tr>
+                <td>ID |</td>
+                <td>Дата-время (по Гринвичу)|</td>
+                <td>Выражение|</td>
+                <td>Ответ|</td>
+            </tr>
+        </table>
+        <footer>
+            <p>Мне очень нужно закончить этот курс</p>
+            <p>Пожалуйста, зачти задачу</p>
+            <p><a href="https://github.com/HamsterMedia/Calculator">Гитхаб</a> 
+                еще один мой прект: <a href="https://mio-libro.ru/2024/01/01/%d0%b4%d0%b5%d0%bd%d1%8c-%d0%bd%d1%83%d0%bb%d0%b5%d0%b2%d0%be%d0%b9/">mio-libro.ru</a><a></a></p>
+         </footer>
+    </body>
+</head>
 
