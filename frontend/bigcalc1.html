@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+    <html> 
+        <head> 
+            <title>Пожалуйста, зачти задачу</title> 
+            <style> body { background-color: hwb(192 71% 3%); } 
+            input { margin-top: 10px; padding: 5px; } 
+            button { background-color: rgb(0, 0, 0); color: rgb(255, 251, 251); padding: 5px 10px; margin-top: 10px; }
+            footer {background-color: hwb(237 47% 8%);}
+            </style> 
+            <h1><a href="readme.html">Readme</a></h1>
+        </head> 
+        <body> 
+            <p>Введите выражение</p>
+            <p><input type="text" id="expression" placeholder="Введите выражение"> </p>
+            <p>Введите значение для таймера</p>
+            <input id="userInput" type="number" value="0"> 
+            <p>Осталось времени:</p>
+    <p id="timerr">0</p>
+    <button onclick="startTime()">Отправить на расчет (POST)</button>
+    <script>
+    var myVar;
+    var timer = document.getElementById("userInput");
+    var countDownSeconds;
+    function startTime() {
+      myVar = setInterval(start, 1000);
+      document.getElementById("timerr").innerHTML = timer.value;
+      countDownSeconds = timer.value;
+document.getElementById("resultID").value = "";
+document.getElementById("resultVal").innerHTML = "";
+    }
+    function start() {
+      countDownSeconds--;
+      document.getElementById("timerr").innerHTML = countDownSeconds;
+      if (countDownSeconds <= 0) {
+        stop();
+        document.getElementById("timerr").innerHTML = 0;
+      }
+    }
+    function stop() {
+      clearInterval(myVar);
+      countDownSeconds = 0;
+      calculatePost();
+    }
+</script>
+<script>
+function calculatePost() {
+var exp = document.getElementById("expression").value;
+const xhttpr = new XMLHttpRequest();
+xhttpr.open('POST', 'http://elit-dress.ru:9990/calc/' + exp, true);
+ 
+xhttpr.send();
+ 
+xhttpr.onload = ()=> {
+  if (xhttpr.status === 200) {
+      const response = JSON.parse(xhttpr.response);
+      console.log(response);
+document.getElementById("resultID").value = response;
+  } else {
+      console.log('Something wrong :(');
+  }
+};
+}
+</script>
+            <button onclick="calculateGet()">Получить результат (GET)</button> 
+<script>
+  function calculateGet() {
+    console.log('Get');
+    var exp = document.getElementById("resultID").value;
+    console.log(exp);
+
+fetch('http://elit-dress.ru:9990/result/' + exp)
+.then(response => {
+	if (response.ok) {
+	return response.json(); // Parse the response data as JSON
+	} else {
+	throw new Error('API request failed');
+	}
+})
+.then(data => {
+	// Process the response data here
+	console.log(data); // Example: Logging the data to the console
+document.getElementById("resultVal").innerHTML = data;
+})
+.catch(error => {
+	// Handle any errors here
+	console.error(error); // Example: Logging the error to the console
+});
+
+  }
+</script>
+            <button onclick="document.location='bd.html'">Все результаты</button> 
+
+
+            <p>ID расчета:</p>
+            <input id="resultID" type="number" readonly="">
+
+            <p>Сам ответ:</p>
+            <p id="resultVal">0</p>
+            <img src="go-foto.png">
+         <footer>
+            <p>Мне очень нужно закончить этот курс</p>
+            <p>Пожалуйста, зачти задачу</p>
+            <p><a href="https://github.com/HamsterMedia/Calculator">Гитхаб</a> 
+                еще один мой прект: <a href="https://mio-libro.ru/2024/01/01/%d0%b4%d0%b5%d0%bd%d1%8c-%d0%bd%d1%83%d0%bb%d0%b5%d0%b2%d0%be%d0%b9/">mio-libro.ru</a><a></a></p>
+         </footer>
+    </body>
