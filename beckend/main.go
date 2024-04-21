@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"text/scanner"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 // ***********************
@@ -152,6 +153,49 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
+
+	//Нулевая часть Марлезонского балета
+	//добавляем авторизацию
+	http.HandleFunc("/autoriz/", func(w http.ResponseWriter, r *http.Request) {
+		/*if r.Method != http.MethodPost {
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+			return
+		}*/
+	
+		// Получаем данные из формы
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Error parsing form", http.StatusInternalServerError)
+			return
+		}
+	
+		// Получаем данные, введенные пользователем, из полей формы
+		username := r.Form.Get("username")
+		password := r.Form.Get("password")
+    
+    // Создаем новый токен
+    token := jwt.New(jwt.SigningMethodHS256)
+
+    // Устанавливаем данные в токен
+    claims := token.Claims.(jwt.MapClaims)
+    claims["username"] = username
+    claims["password"] = password
+    //claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Установка срока действия токена
+
+    // Подписываем токен с использованием секретного ключа
+	const secretKey = "super_secret_signature"
+    tokenString, err := token.SignedString([]byte(secretKey))
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        fmt.Fprintln(w, "Failed to generate token", err)
+        return
+    }
+
+    // Отправляем токен обратно клиенту
+    w.WriteHeader(http.StatusOK)
+    w.Header().Set("Content-Type", "application/json")
+    fmt.Fprintf(w, `{"token": "%s"}`, tokenString)
+})
 
 	// первая часть Марлезонского балета POST-метод
 	// сохраняем выражение в базу и возвращаем ИД выражения
